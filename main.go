@@ -6,6 +6,7 @@ import (
     "errors"
     "github.com/antiquark/plugo"
     dragonflyServer "github.com/df-mc/dragonfly/server"
+    dragonflyPlayer "github.com/df-mc/dragonfly/server/player"
     jukeboxServerAPI "github.com/jukebox-mc/jukebox/api/server"
 )
 
@@ -13,21 +14,28 @@ func main() {
     log.Println("Jukebox is preparing to juke..")
 
     // Create Minecraft server
-    server = dragonflyServer.New(nil, nil)
+    conf, err := dragonflyServer.DefaultConfig().Config(nil)
+
+    if err != nil {
+        panic(err)
+    }
+
+    server := conf.New()
 
     // Create the plugo server
     plugo := plugo.New("jukebox")
 
     // Provide actual server to functions that get called remotely
-    jukeboxServerAPI.server = server
+    jukeboxServerAPI.Server = server
 
     // Expose server functions
-    plugo.Expose("SetName", jukeboxServer.SetName)
+    plugo.Expose("IsPlayerOnline", jukeboxServerAPI.IsPlayerOnline)
+    plugo.Expose("Players", jukeboxServerAPI.Players)
 
     // Load plugins or if first time running, create plugins folder
     path := "plugins"
     
-    _, err := os.Stat(path)
+    _, err = os.Stat(path)
 
     if errors.Is(err, os.ErrNotExist) {
         os.Mkdir(path, os.ModePerm)
@@ -41,8 +49,10 @@ func main() {
 
     log.Printf("Jukebox detected %v discs", len(plugins))
 
-    server.Start()
+    server.Listen()
 
-    for server.Accept() {
+    for server.Accept(func(_ *dragonflyPlayer.Player) {
+
+    }) {
     }
 }
