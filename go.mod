@@ -3,7 +3,7 @@ module github.com/jukebox-mc/jukebox
 go 1.18
 
 require (
-	github.com/antiquark/plugo v0.0.0-20221106143925-9fc531ac1299
+	github.com/antiquark/plugo v0.1.3
 	github.com/df-mc/dragonfly v0.8.6
 )
 

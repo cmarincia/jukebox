@@ -37,6 +37,12 @@ github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/antiquark/plugo v0.0.0-20221106143925-9fc531ac1299 h1:DDeMT5PkWEW6cucQXip5qP+4yBwzki0Pq+nt9nJyaLc=
 github.com/antiquark/plugo v0.0.0-20221106143925-9fc531ac1299/go.mod h1:jlnkW6uJuJGKSd3Dy6CAjyQ9X/f4EZZIkzti01CkWXk=
+github.com/antiquark/plugo v0.1.1 h1:pExcz4uYxxMRI8uIA/FJe6yw3DGoEma7aG+AifqREY4=
+github.com/antiquark/plugo v0.1.1/go.mod h1:jlnkW6uJuJGKSd3Dy6CAjyQ9X/f4EZZIkzti01CkWXk=
+github.com/antiquark/plugo v0.1.2 h1:O/9vxH/snOl2Do35QVsl+MUo6J8S3bDxJbPtCMo6ogk=
+github.com/antiquark/plugo v0.1.2/go.mod h1:jlnkW6uJuJGKSd3Dy6CAjyQ9X/f4EZZIkzti01CkWXk=
+github.com/antiquark/plugo v0.1.3 h1:Qrwz2jItQZPjt+AcScYsYK7mz/bWdIWcdH3nkG1vhAA=
+github.com/antiquark/plugo v0.1.3/go.mod h1:jlnkW6uJuJGKSd3Dy6CAjyQ9X/f4EZZIkzti01CkWXk=
 github.com/brentp/intintmap v0.0.0-20190211203843-30dc0ade9af9 h1:/G0ghZwrhou0Wq21qc1vXXMm/t/aKWkALWwITptKbE0=
 github.com/brentp/intintmap v0.0.0-20190211203843-30dc0ade9af9/go.mod h1:TOk10ahXejq9wkEaym3KPRNeuR/h5Jx+s8QRWIa2oTM=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
