@@ -7,11 +7,6 @@ import (
 	dfPlayer "github.com/df-mc/dragonfly/server/player"
 )
 
-var (
-    pluginServer = global.PluginServer
-    server = global.Server
-)
-
 // event(priority(plugoName(functionNames)))
 var eventSubs = make(map[int]map[int]map[string][]string)
 
@@ -26,8 +21,7 @@ func init() {
 }
 
 const (
-	AttackEntity = iota
-	Chat
+	Chat = iota
 )
 
 type EventHandler struct {
@@ -54,7 +48,7 @@ func (e *EventHandler) HandleChat(ctx *dfEvent.Context, message *string) {
 	for level := 0; level < 5; level++ {
 		for pluginId, functionIds := range eventSubs[Chat][level] {
 			for _, functionId := range functionIds {
-				resp, _ := pluginServer.Call(
+				resp, _ := global.PluginServer.Call(
                     pluginId, 
                     functionId, 
                     e.Player.Name(), 

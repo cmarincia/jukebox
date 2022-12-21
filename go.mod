@@ -3,13 +3,13 @@ module github.com/jukebox-mc/jukebox
 go 1.18
 
 require (
+	github.com/curzodo/plugo v0.6.3
 	github.com/df-mc/dragonfly v0.8.10
 )
 
 require (
 	github.com/brentp/intintmap v0.0.0-20190211203843-30dc0ade9af9 // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
-	github.com/curzodo/plugo v0.6.3 // indirect
 	github.com/df-mc/atomic v1.10.0 // indirect
 	github.com/df-mc/goleveldb v1.1.9 // indirect
 	github.com/go-gl/mathgl v1.0.0 // indirect

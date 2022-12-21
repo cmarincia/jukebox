@@ -7,10 +7,8 @@ import (
     dfEffect "github.com/df-mc/dragonfly/server/entity/effect"
 )
 
-var server = global.Server
-
 func AbortBreaking(username string) {
-    p, ok := server.PlayerByName(username)
+    p, ok := global.Server.PlayerByName(username)
 
     if !ok { return }
 
@@ -18,7 +16,7 @@ func AbortBreaking(username string) {
 }
 
 func Absorption(username string) (float64, error) {
-    p, ok := server.PlayerByName(username)
+    p, ok := global.Server.PlayerByName(username)
 
     if !ok {
         var empty float64
@@ -31,7 +29,7 @@ func Absorption(username string) (float64, error) {
 }
 
 func AddEffect(username, effectName string, strength, duration int) {
-    p, ok := server.PlayerByName(username)
+    p, ok := global.Server.PlayerByName(username)
 
     if !ok {
         return
@@ -79,7 +77,7 @@ func AddEffect(username, effectName string, strength, duration int) {
 }
 
 func AddExperience(username string, levels int) {
-    player, ok := server.PlayerByName(username)
+    player, ok := global.Server.PlayerByName(username)
 
     if !ok {
         return
@@ -89,7 +87,7 @@ func AddExperience(username string, levels int) {
 }
 
 func AddFood(username string, points int) {
-    p, ok := server.PlayerByName(username)
+    p, ok := global.Server.PlayerByName(username)
 
     if !ok {
         return
@@ -99,7 +97,7 @@ func AddFood(username string, points int) {
 }
 
 func AirSupply(username string) int {
-    p, ok := server.PlayerByName(username)
+    p, ok := global.Server.PlayerByName(username)
 
     if !ok {
         return -1

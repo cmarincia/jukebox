@@ -4,15 +4,13 @@ import (
     "github.com/jukebox-mc/jukebox/global"
 )
 
-var server = global.Server
-
 func IsPlayerOnline(playerName string) bool {
-    _, ok := server.PlayerByName(playerName)
+    _, ok := global.Server.PlayerByName(playerName)
     return ok
 }
 
 func Players() []string {
-    players := server.Players()
+    players := global.Server.Players()
 
     playerNames := make([]string, len(players))
 

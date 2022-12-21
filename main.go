@@ -33,24 +33,24 @@ func main() {
 
     // Expose server functions
     pluginServer.Expose(jukeboxServerAPI.IsPlayerOnline)
-    pluginServer.Expose(jukeboxServerAPI.Players)
+    pluginServer.ExposeId("Players", jukeboxServerAPI.Players)
 
     // Expose player functions
     pluginServer.Expose(jukeboxPlayerAPI.AbortBreaking)
     pluginServer.Expose(jukeboxPlayerAPI.Absorption)
-    pluginServer.Expose(jukeboxPlayerAPI.AddEffect)
+    pluginServer.ExposeId("AddEffect", jukeboxPlayerAPI.AddEffect)
     pluginServer.Expose(jukeboxPlayerAPI.AddExperience)
     pluginServer.Expose(jukeboxPlayerAPI.AddFood)
     pluginServer.Expose(jukeboxPlayerAPI.AirSupply)
 
     // Expose event functions
-    pluginServer.Expose(jukeboxEventAPI.SubscribeEvent)
+    pluginServer.ExposeId("SubscribeEvent", jukeboxEventAPI.SubscribeEvent)
 
     // Expose command functions
     pluginServer.Expose(jukeboxCommandAPI.AddCommand)
 
     pluginServer.StartChildren("plugins")
-    
+
     server.Listen()
 
     for server.Accept(func(p *dfPlayer.Player) {
