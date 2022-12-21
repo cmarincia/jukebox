@@ -1,8 +1,9 @@
 package command
 
 import (
+    "github.com/df-mc/dragonfly/server/player"
     "github.com/df-mc/dragonfly/server/cmd"
-    "github.com/antiquark/plugo"
+    "github.com/curzodo/plugo"
 )
 
 var Plugo *plugo.Plugo
@@ -23,5 +24,5 @@ type commandHandler struct {
 }
 
 func (ch commandHandler) Run(src cmd.Source, o *cmd.Output) {
-    Plugo.Call(ch.plugoName, ch.functionName, src.Name())
+    Plugo.Call(ch.plugoName, ch.functionName, src.(*player.Player).Name())
 }

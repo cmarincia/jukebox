@@ -2,111 +2,108 @@ package player
 
 import (
     "time"
-    dragonflyServer "github.com/df-mc/dragonfly/server"
-    dragonflyEffect "github.com/df-mc/dragonfly/server/entity/effect"
+    "errors"
+    "github.com/jukebox-mc/jukebox/global"
+    dfEffect "github.com/df-mc/dragonfly/server/entity/effect"
 )
 
-var DragonflyServer *dragonflyServer.Server
+var server = global.Server
 
-func AbortBreaking(args ...any) []any {
-    dragonflyPlayer, ok := DragonflyServer.PlayerByName(args[0].(string))
+func AbortBreaking(username string) {
+    p, ok := server.PlayerByName(username)
 
-    if !ok {
-        return nil
-    }
+    if !ok { return }
 
-    dragonflyPlayer.AbortBreaking()
-    return nil
+    p.AbortBreaking()
 }
 
-func Absorption(args ...any) []any {
-    dragonflyPlayer, ok := DragonflyServer.PlayerByName(args[0].(string))
+func Absorption(username string) (float64, error) {
+    p, ok := server.PlayerByName(username)
 
     if !ok {
-        return nil
+        var empty float64
+        return empty, errors.New(
+            "Player with username " + username + " is not online.",
+        )
     }
 
-    return []any{dragonflyPlayer.Absorption()}
+    return p.Absorption(), nil
 }
 
-func AddEffect(args ...any) []any {
-    dragonflyPlayer, ok := DragonflyServer.PlayerByName(args[0].(string))
+func AddEffect(username, effectName string, strength, duration int) {
+    p, ok := server.PlayerByName(username)
 
     if !ok {
-        return nil
+        return
     }
 
-    strength := args[2].(int)
-    duration := args[3].(int)
+    var effect dfEffect.Effect
 
-    var effect dragonflyEffect.Effect
-
-    switch args[1] {
+    switch effectName {
         case "absorption":
-            effect = dragonflyEffect.New(
-                dragonflyEffect.Absorption{},
+            effect = dfEffect.New(
+                dfEffect.Absorption{},
                 strength,
                 time.Duration(duration) * time.Millisecond,
             )
         case "blindness":
-            effect = dragonflyEffect.New(
-                dragonflyEffect.Blindness{},
+            effect = dfEffect.New(
+                dfEffect.Blindness{},
                 strength,
                 time.Duration(duration) * time.Millisecond,
             )
-        case "conduitpower":
-            effect = dragonflyEffect.New(
-                dragonflyEffect.ConduitPower{},
+        case "conduit_power":
+            effect = dfEffect.New(
+                dfEffect.ConduitPower{},
                 strength,
                 time.Duration(duration) * time.Millisecond,
             )
         case "darkness":
-            effect = dragonflyEffect.New(
-                dragonflyEffect.Darkness{},
+            effect = dfEffect.New(
+                dfEffect.Darkness{},
                 strength,
                 time.Duration(duration) * time.Millisecond,
             )
-        case "fatalpoison":
-            effect = dragonflyEffect.New(
-                dragonflyEffect.FatalPoison{},
+        case "fatal_poison":
+            effect = dfEffect.New(
+                dfEffect.FatalPoison{},
                 strength,
                 time.Duration(duration) * time.Millisecond,
             )
         default:
+            return
     }
     
-    dragonflyPlayer.AddEffect(effect)
-    return nil
+    p.AddEffect(effect)
+    return
 }
 
-func AddExperience(args ...any) []any {
-    dragonflyPlayer, ok := DragonflyServer.PlayerByName(args[0].(string))
+func AddExperience(username string, levels int) {
+    player, ok := server.PlayerByName(username)
 
     if !ok {
-        return nil
+        return
     }
 
-    dragonflyPlayer.AddExperience(args[1].(int))
-    return nil
+    player.AddExperience(levels)
 }
 
-func AddFood(args ...any) []any {
-    dragonflyPlayer, ok := DragonflyServer.PlayerByName(args[0].(string))
+func AddFood(username string, points int) {
+    p, ok := server.PlayerByName(username)
 
     if !ok {
-        return nil
+        return
     }
 
-    dragonflyPlayer.AddFood(args[1].(int))
-    return nil
+    p.AddFood(points)
 }
 
-func AirSupply(args ...any) []any {
-    dragonflyPlayer, ok := DragonflyServer.PlayerByName(args[0].(string))
+func AirSupply(username string) int {
+    p, ok := server.PlayerByName(username)
 
     if !ok {
-        return nil
+        return -1
     }
 
-    return []any{int(dragonflyPlayer.AirSupply())}
+    return int(p.AirSupply())
 }

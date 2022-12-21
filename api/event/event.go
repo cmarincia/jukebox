@@ -1,17 +1,16 @@
 package event
 
 import (
-	"github.com/antiquark/plugo"
 	// "github.com/go-gl/mathgl/mgl64"
-	dragonflyServer "github.com/df-mc/dragonfly/server"
-	dragonflyWorld "github.com/df-mc/dragonfly/server/entity"
-	dragonflyEvent "github.com/df-mc/dragonfly/server/event"
-	dragonflyPlayer "github.com/df-mc/dragonfly/server/player"
+    "github.com/jukebox-mc/jukebox/global"
+	dfEvent "github.com/df-mc/dragonfly/server/event"
+	dfPlayer "github.com/df-mc/dragonfly/server/player"
 )
 
-var Plugo *plugo.Plugo
-
-var DragonflyServer *dragonflyServer.Server
+var (
+    pluginServer = global.PluginServer
+    server = global.Server
+)
 
 // event(priority(plugoName(functionNames)))
 var eventSubs = make(map[int]map[int]map[string][]string)
@@ -32,71 +31,45 @@ const (
 )
 
 type EventHandler struct {
-	dragonflyPlayer.NopHandler
-	Player *dragonflyPlayer.Player
+	dfPlayer.NopHandler
+	Player *dfPlayer.Player
 }
 
-func NewEventHandler(p *dragonflyPlayer.Player) *EventHandler {
+func NewEventHandler(p *dfPlayer.Player) *EventHandler {
 	return &EventHandler{
-		dragonflyPlayer.NopHandler{},
+		dfPlayer.NopHandler{},
 		p,
 	}
 }
 
 // Allows plugins to subscribe to events
-func SubscribeEvent(args ...any) []any {
-	plugoName := args[0].(string)
-	handlerName := args[1].(string)
-	event := args[2].(int)
-	level := args[3].(int)
-
-	eventSubs[event][level][plugoName] = append(eventSubs[event][level][plugoName], handlerName)
-
-	return nil
+func SubscribeEvent(plugoId, handlerId string, event, level int) {
+	eventSubs[event][level][plugoId] = append(
+        eventSubs[event][level][plugoId], 
+        handlerId,
+    )
 }
 
-func (e *EventHandler) HandleAttackEntity(ctx *dragonflyEvent.Context, entity dragonflyWorld.Entity, force, height *float64, critical *bool) {
+func (e *EventHandler) HandleChat(ctx *dfEvent.Context, message *string) {
 	for level := 0; level < 5; level++ {
-		for plugoName, functionNames := range eventSubs[Chat][level] {
-			for _, functionName := range functionNames {
-                var resp []any
+		for pluginId, functionIds := range eventSubs[Chat][level] {
+			for _, functionId := range functionIds {
+				resp, _ := pluginServer.Call(
+                    pluginId, 
+                    functionId, 
+                    e.Player.Name(), 
+                    *message,
+                )
 
-                // Include entity type and entity name (player username if entity type is player
-                resp, _ = Plugo.Call(plugoName, functionName, e.Player.Name(), *force, *height, *critical, entity.EncodeEntity(), entity.Name())
+                newMessage := resp[0].(string)
+                cancel := resp[1].(bool)
 
-                // If length of resp is one, then it is a boolean indicating whether or not this event should be cancelled
-                if len(resp) == 1 {
-                    shouldCancel = resp[0].(bool)
-
-                    if shouldCancel {
-                        ctx.Cancel()
-                        return
-                    } else {
-                        continue
-                    }
-                }
-
-                *force = resp[0].(float64)
-                *height = resp[1].(float64)
-                *critical = resp[2].(bool)
-			}
-		}
-	}
-}
-
-func (e *EventHandler) HandleChat(ctx *dragonflyEvent.Context, message *string) {
-	for level := 0; level < 5; level++ {
-		for plugoName, functionNames := range eventSubs[Chat][level] {
-			for _, functionName := range functionNames {
-				resp, _ := Plugo.Call(plugoName, functionName, e.Player.Name(), *message)
-
-				// If length of string returned from plugin is zero, then cancel
-				if len(resp[0].(string)) == 0 {
+				if cancel {
 					ctx.Cancel()
 					return
 				}
 
-				*message = resp[0].(string)
+				*message = newMessage
 			}
 		}
 	}
